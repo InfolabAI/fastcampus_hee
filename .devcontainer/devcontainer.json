@@ -3,52 +3,55 @@
     // Phase 1 단순화 전략에 따른 단일 통합 컨테이너 구성
     "build": {
         // Phase 1 통합 보안 실습을 위한 전용 Dockerfile
+        // 1. VSCode가 devcontainer.json 읽음
+        // 2. "dockerfile": "Dockerfile.integrated" 설정으로 Docker에게 이 파일로 이미지 빌드 지시
+        // 3. Docker가 Dockerfile.integrated 명령어들을 실행하여 이미지 생성
+        // 4. 생성된 이미지로 컨테이너 인스턴스를 실행
         "dockerfile": "Dockerfile.integrated",
         // 빌드 컨텍스트를 프로젝트 루트로 설정
         "context": ".."
     },
-    // 컨테이너 생성 후 실행할 명령어
-    "postCreateCommand": {
-        "setup": "bash /scripts/setup_integrated_environment.sh",
-        "demo": "echo '🚀 MCP 보안 실습 준비 완료! 실습 시작: python3 /scripts/security_demo.py'"
-    },
-    // 호스트 폴더 마운트 설정
-    // "mounts": [
-    //     "source=${localWorkspaceFolder}/,target=/workspaces/fastcampus/,type=bind,consistency=cached"
-    // ],
+    // 호스트 폴더 마운트 설정은 주석 처리해도 됩니다. 그 이유는 VSCode Dev Container가 자동으로 현재 워크스페이스를 마운트하기 때문입니다.
+    // - VSCode는 기본적으로 열린 폴더를 /workspaces/{폴더명}에 자동 마운트
+    // - 주석 처리된 mount 설정은 커스텀 마운트가 필요할 때만 사용
+    // - 지금은 VSCode의 기본 마운트 동작으로 충분하여 주석 처리함
+    // - 실제로 호스트의 파일 변경이 컨테이너에 즉시 반영되는 것을 확인 가능
     // Phase 1 실습에 필요한 포트 설정
     "forwardPorts": [
-        8080, // MCP Server (HTTP transport)
-        8081, // 보안 강화된 MCP Server (선택적)
-        8082 // 모니터링 대시보드 (선택적)
+        8080 // MCP Server (HTTP transport)
     ],
     "portsAttributes": {
         "8080": {
             "label": "MCP Server (취약한 버전)",
             "onAutoForward": "notify"
-        },
-        "8081": {
-            "label": "MCP Server (보안 강화 버전)",
-            "onAutoForward": "notify"
-        },
-        "8082": {
-            "label": "보안 모니터링 대시보드",
-            "onAutoForward": "openBrowser"
         }
     },
     // VS Code 설정 및 확장 프로그램
     "customizations": {
         "vscode": {
             "settings": {
+                // Python 인터프리터 경로 설정 - VSCode가 어떤 Python을 사용할지 지정
+                // 필요성: 여러 Python 버전이 있을 때 정확한 버전 지정
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
+                // Python 코드 검사 활성화 - 코드 작성 중 오류 실시간 감지
+                // 필요성: 문법 오류나 스타일 문제를 즉시 발견
                 "python.linting.enabled": true,
+                // Pylint 사용 - Python 코드 품질 검사 도구
+                // 필요성: PEP8 스타일 가이드 준수 및 잠재적 버그 감지
                 "python.linting.pylintEnabled": true,
+                // 기본 터미널을 bash로 설정
+                // 필요성: 일관된 쉘 환경 제공
                 "terminal.integrated.defaultProfile.linux": "bash",
                 // 보안 실습을 위한 추가 설정
+                // 로그 파일 확장자 연결 - .log 파일을 로그 형식으로, security.log를 JSON으로 인식
+                // 필요성: 로그 파일 구문 강조로 가독성 향상
                 "files.associations": {
                     "*.log": "log",
                     "security.log": "json"
                 },
+                // security.log 파일에 대한 JSON 스키마 정의
+                // 필요성: security.log 편집 시 자동완성 및 유효성 검사 제공
+                // timestamp, event_type, severity 필드가 있는 JSON 구조 정의
                 "json.schemas": [
                     {
                         "fileMatch": [
@@ -73,19 +76,19 @@
             },
             "extensions": [
                 // 기본 Python 개발 도구
-                "ms-python.python",
-                "ms-python.vscode-pylance",
+                "ms-python.python", // 필수: Python 언어 지원 기본 확장
+                "ms-python.vscode-pylance", // 필수: Python 인텔리센스, 타입 체킹
                 // MCP 관련
-                "anthropic.claude-code",
-                "google.gemini-for-vscode",
+                "anthropic.claude-code", // 선택: Claude AI 코딩 어시스턴트
+                "google.gemini-for-vscode", // 선택: Gemini AI 코딩 어시스턴트
                 // 보안 실습 도구
-                "humao.rest-client", // REST API 테스트
-                "ms-azuretools.vscode-docker", // Docker 관리
-                "redhat.vscode-yaml", // YAML 편집
-                "streetsidesoftware.code-spell-checker", // 오타 검사
+                "humao.rest-client", // 유용: REST API 테스트 - API 보안 테스트용
+                "ms-azuretools.vscode-docker", // 유용: Docker 관리 - 컨테이너 확인용
+                "redhat.vscode-yaml", // 유용: YAML 편집 - 설정 파일 편집용
+                "streetsidesoftware.code-spell-checker", // 선택: 오타 검사 - 코드 품질용
                 // 로그 분석 도구
-                "emilast.LogFileHighlighter", // 로그 파일 하이라이팅
-                "IBM.output-colorizer" // 출력 컬러링
+                "emilast.LogFileHighlighter", // 유용: 로그 파일 하이라이팅 - 보안 로그 분석용
+                "IBM.output-colorizer" // 선택: 출력 컬러링 - 터미널 가독성 향상
             ]
         }
     },
@@ -93,20 +96,20 @@
     "containerEnv": {
         // MCP 서버 기본 설정
         "MCP_SERVER_PORT": "8080",
-        "MCP_SECURE_SERVER_PORT": "8081",
+        // 8081 포트 관련 삭제
         // Node.js 설정
-        "NODE_VERSION": "22",
-        "NVM_DIR": "/home/vscode/.nvm",
+        "NODE_VERSION": "22", // 필요: Node.js 버전 명시
+        "NVM_DIR": "/home/vscode/.nvm", // 필요: nvm 설치 경로
         // 보안 실습 환경
-        "SECURITY_LAB_MODE": "enabled",
-        "LOG_LEVEL": "INFO"
+        "SECURITY_LAB_MODE": "enabled", // 선택: 실습 모드 플래그
+        "LOG_LEVEL": "INFO" // 유용: 로그 레벨 설정
     },
     // 컨테이너 실행 사용자
-    "remoteUser": "vscode",
+    "remoteUser": "vscode", // 필수: 비root 사용자로 실행 (보안상 중요)
     // 추가 런타임 인자
     "runArgs": [
-        "--cap-add=SYS_PTRACE", // 디버깅 지원
+        "--cap-add=SYS_PTRACE", // 필요: 디버깅 지원 - Python 디버거 사용 시 필요
         "--security-opt",
-        "seccomp=unconfined" // 보안 실습을 위한 설정
+        "seccomp=unconfined" // 선택: 보안 실습을 위한 설정 - 시스템 콜 제한 해제 (보안 테스트용)
     ]
 }

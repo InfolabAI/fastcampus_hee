@@ -1,0 +1,5 @@
+*.pyc
+패스트*
+Part2*/
+gemini-cli-mcp/
+mds/

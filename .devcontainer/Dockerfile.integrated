@@ -1,9 +1,18 @@
 # Phase 1 MCP 보안 교육 - 간소화된 통합 환경
 # 기존 Dockerfile을 기반으로 최소한의 보안 실습 도구만 추가
 
+# 아래는 Microsoft가 제공하는 Dev Container 전용 이미지로 다음 장점이 있습니다:
+# - VSCode Dev Container에 최적화된 설정 (git, curl, sudo 등 기본 도구 포함)
+# - vscode 사용자가 미리 생성되어 있음 (UID 1000)
+# - Python 3.11 버전 설치됨
+# - Debian Bullseye 기반으로 안정성이 높음
+# - Dev Container 기능(포트 포워딩, 파일 감시 등)이 사전 구성됨
 FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
 
-# 환경 변수 설정
+# Python의 출력 버퍼링을 비활성화하는 환경 변수를 설정합니다.
+# - 버퍼링이 켜져있으면 print() 출력이 즉시 표시되지 않고 버퍼에 쌓였다가 나중에 표시됨
+# - 컨테이너 환경에서는 실시간 로그 확인이 중요하므로 버퍼링을 끔
+# - 디버깅 시 print 문이 즉시 보이게 하여 문제 파악이 쉬워짐
 ENV PYTHONUNBUFFERED=1
 
 # 1. 필수 보안 실습 도구만 설치 (최소화)
@@ -53,23 +62,15 @@ ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
 # root로 돌아가서 나머지 설정 수행
 USER root
 
-# 4. 실습 디렉토리 생성
-RUN sudo mkdir -p /scripts /server /logs && \
-    sudo chown -R vscode:vscode /scripts /server /logs
-
-# 5. 간단한 시작 스크립트
-RUN echo '#!/bin/bash\n\
-    echo "✅ 실습 환경 준비 완료!"\n\
-    echo "📚 Node.js 버전: $(node -v)"\n\
-    echo "📚 npm 버전: $(npm -v)"\n\
-    echo "📚 python3 /scripts/security_demo.py 로 실습을 시작하세요."' > /scripts/start_services.sh && \
-    chmod +x /scripts/start_services.sh
-
-# 7. 작업 디렉토리 설정
+# 5. 작업 디렉토리 설정
 WORKDIR /workspaces/fastcampus
 
-# 8. 포트 노출
-EXPOSE 8080 8081 9200
+# 6. 포트 노출
+# EXPOSE는 문서화 목적입니다. 실제로 포트를 열지는 않습니다.
+# - EXPOSE: "이 컨테이너는 8080 포트를 사용할 예정"이라고 알려주는 메타데이터
+# - devcontainer.json의 forwardPorts: 실제로 호스트와 컨테이너 간 포트를 연결
+# - EXPOSE가 없어도 포트 포워딩은 작동하지만, 이미지 사용자에게 어떤 포트를 쓰는지 알려주는 역할
+EXPOSE 8080
 
-# 9. 기본 명령어
+# 7. 기본 명령어
 CMD ["sleep", "infinity"]
