@@ -1,0 +1,75 @@
+# Phase 1 MCP 보안 교육 - 간소화된 통합 환경
+# 기존 Dockerfile을 기반으로 최소한의 보안 실습 도구만 추가
+
+FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
+
+# 환경 변수 설정
+ENV PYTHONUNBUFFERED=1
+
+# 1. 필수 보안 실습 도구만 설치 (최소화)
+RUN sudo apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && sudo apt-get -y install --no-install-recommends \
+    # 기존 도구 유지
+    git docker.io \
+    # 보안 실습 필수 도구만 추가
+    curl jq \
+    # 간단한 공격 시뮬레이션용
+    nmap \
+    && sudo usermod -aG docker vscode \
+    && sudo apt-get clean \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+# 2. Python 패키지 설치 (기존 + 보안 실습 필수)
+RUN pip install --no-cache-dir \
+    # 기존 패키지
+    fastapi==0.116.1 \
+    uvicorn==0.35.0 \
+    httpx==0.28.1 \
+    pydantic==2.11.7 \
+    python-dotenv==1.1.1 \
+    fastmcp==2.11.2 \
+    # 보안 실습 필수 패키지만 추가
+    PyJWT==2.8.0 \
+    python-json-logger==2.0.7 \
+    aiohttp==3.9.1 \
+    pytest==8.4.2
+
+# 3. nvm과 Node.js 설치
+# nvm 설치를 위한 환경 설정
+ENV NVM_DIR="/home/vscode/.nvm"
+ENV NODE_VERSION="22"
+
+# vscode 사용자로 nvm 및 Node.js 설치
+USER vscode
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+    . "$NVM_DIR/nvm.sh" && \
+    nvm install $NODE_VERSION && \
+    nvm alias default $NODE_VERSION && \
+    nvm use default
+
+# PATH에 Node.js 추가
+ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
+
+# root로 돌아가서 나머지 설정 수행
+USER root
+
+# 4. 실습 디렉토리 생성
+RUN sudo mkdir -p /scripts /server /logs && \
+    sudo chown -R vscode:vscode /scripts /server /logs
+
+# 5. 간단한 시작 스크립트
+RUN echo '#!/bin/bash\n\
+    echo "✅ 실습 환경 준비 완료!"\n\
+    echo "📚 Node.js 버전: $(node -v)"\n\
+    echo "📚 npm 버전: $(npm -v)"\n\
+    echo "📚 python3 /scripts/security_demo.py 로 실습을 시작하세요."' > /scripts/start_services.sh && \
+    chmod +x /scripts/start_services.sh
+
+# 7. 작업 디렉토리 설정
+WORKDIR /workspaces/fastcampus
+
+# 8. 포트 노출
+EXPOSE 8080 8081 9200
+
+# 9. 기본 명령어
+CMD ["sleep", "infinity"]

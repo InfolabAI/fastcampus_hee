@@ -1,0 +1,112 @@
+{
+    "name": "MCP Security Training - All-in-One",
+    // Phase 1 단순화 전략에 따른 단일 통합 컨테이너 구성
+    "build": {
+        // Phase 1 통합 보안 실습을 위한 전용 Dockerfile
+        "dockerfile": "Dockerfile.integrated",
+        // 빌드 컨텍스트를 프로젝트 루트로 설정
+        "context": ".."
+    },
+    // 컨테이너 생성 후 실행할 명령어
+    "postCreateCommand": {
+        "setup": "bash /scripts/setup_integrated_environment.sh",
+        "demo": "echo '🚀 MCP 보안 실습 준비 완료! 실습 시작: python3 /scripts/security_demo.py'"
+    },
+    // 호스트 폴더 마운트 설정
+    // "mounts": [
+    //     "source=${localWorkspaceFolder}/,target=/workspaces/fastcampus/,type=bind,consistency=cached"
+    // ],
+    // Phase 1 실습에 필요한 포트 설정
+    "forwardPorts": [
+        8080, // MCP Server (HTTP transport)
+        8081, // 보안 강화된 MCP Server (선택적)
+        8082 // 모니터링 대시보드 (선택적)
+    ],
+    "portsAttributes": {
+        "8080": {
+            "label": "MCP Server (취약한 버전)",
+            "onAutoForward": "notify"
+        },
+        "8081": {
+            "label": "MCP Server (보안 강화 버전)",
+            "onAutoForward": "notify"
+        },
+        "8082": {
+            "label": "보안 모니터링 대시보드",
+            "onAutoForward": "openBrowser"
+        }
+    },
+    // VS Code 설정 및 확장 프로그램
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "terminal.integrated.defaultProfile.linux": "bash",
+                // 보안 실습을 위한 추가 설정
+                "files.associations": {
+                    "*.log": "log",
+                    "security.log": "json"
+                },
+                "json.schemas": [
+                    {
+                        "fileMatch": [
+                            "security.log"
+                        ],
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "string"
+                                },
+                                "event_type": {
+                                    "type": "string"
+                                },
+                                "severity": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "extensions": [
+                // 기본 Python 개발 도구
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                // MCP 관련
+                "anthropic.claude-code",
+                "google.gemini-for-vscode",
+                // 보안 실습 도구
+                "humao.rest-client", // REST API 테스트
+                "ms-azuretools.vscode-docker", // Docker 관리
+                "redhat.vscode-yaml", // YAML 편집
+                "streetsidesoftware.code-spell-checker", // 오타 검사
+                // 로그 분석 도구
+                "emilast.LogFileHighlighter", // 로그 파일 하이라이팅
+                "IBM.output-colorizer" // 출력 컬러링
+            ]
+        }
+    },
+    // 환경 변수 설정
+    "containerEnv": {
+        // MCP 서버 기본 설정
+        "MCP_SERVER_PORT": "8080",
+        "MCP_SECURE_SERVER_PORT": "8081",
+        // Node.js 설정
+        "NODE_VERSION": "22",
+        "NVM_DIR": "/home/vscode/.nvm",
+        // 보안 실습 환경
+        "SECURITY_LAB_MODE": "enabled",
+        "LOG_LEVEL": "INFO"
+    },
+    // 컨테이너 실행 사용자
+    "remoteUser": "vscode",
+    // 추가 런타임 인자
+    "runArgs": [
+        "--cap-add=SYS_PTRACE", // 디버깅 지원
+        "--security-opt",
+        "seccomp=unconfined" // 보안 실습을 위한 설정
+    ]
+}
