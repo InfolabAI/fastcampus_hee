@@ -59,6 +59,11 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | b
 # PATH에 Node.js 추가
 ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
 
+# 4. uv (Python package manager) 설치
+USER vscode
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/home/vscode/.cargo/bin:$PATH"
+
 # root로 돌아가서 나머지 설정 수행
 USER root
 
