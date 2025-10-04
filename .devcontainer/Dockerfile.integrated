@@ -59,18 +59,13 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | b
 # PATH에 Node.js 추가
 ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
 
-# 4. uv (Python package manager) 설치
-USER vscode
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/home/vscode/.cargo/bin:$PATH"
-
 # root로 돌아가서 나머지 설정 수행
 USER root
 
-# 5. 작업 디렉토리 설정
+# 4. 작업 디렉토리 설정
 WORKDIR /workspaces/fastcampus
 
-# 6. 포트 노출
+# 5. 포트 노출
 # EXPOSE는 문서화 목적입니다. 실제로 포트를 열지는 않습니다.
 # - EXPOSE: "이 컨테이너는 8080 포트를 사용할 예정"이라고 알려주는 메타데이터
 # - devcontainer.json의 forwardPorts: 실제로 호스트와 컨테이너 간 포트를 연결
