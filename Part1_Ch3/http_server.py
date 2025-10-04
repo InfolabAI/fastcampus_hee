@@ -30,7 +30,9 @@ async def create_greeting(name: str) -> str:
     return f"Hello, {name}! Welcome to the world of MCP."
 
 if __name__ == "__main__":
-    print("Starting MCP server on http://127.0.0.1:8000")
-    print("MCP endpoint is available at http://127.0.0.1:8000/mcp")
+    ip = "127.0.0.1"
+    port = 8000
+    print(f"Starting MCP server on http://{ip}:{port}")
+    print(f"MCP endpoint is available at http://{ip}:{port}/mcp")
     # FastMCP가 내부적으로 uvicorn과 같은 ASGI 서버를 사용하여 실행합니다.
-    mcp.run(transport="http", host="127.0.0.1", port=8000)
+    mcp.run(transport="http", host=ip, port=port)
