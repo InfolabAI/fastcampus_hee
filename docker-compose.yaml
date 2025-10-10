@@ -11,9 +11,8 @@ services:
     # 호스트 사용자와 컨테이너 사용자 동기화
     user: "${UID}:${GID}"
 
-    # 홈 디렉터리 및 프로젝트 폴더 마운트
+    # 프로젝트 폴더만 마운트 (홈 디렉터리 제외하여 호스트 설정 간섭 방지)
     volumes:
-      - ${HOME}:${HOME}
       - .:/workspaces/fastcampus
     working_dir: /workspaces/fastcampus
 
@@ -23,7 +22,7 @@ services:
 
     # 환경변수 설정
     environment:
-      - HOME=${HOME}
+      - HOME=/home/vscode
       - MCP_SERVER_PORT=8080
       - NODE_VERSION=22
       - NVM_DIR=/home/vscode/.nvm
