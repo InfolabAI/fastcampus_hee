@@ -1,0 +1,503 @@
+Test workspace created at: /workspaces/fastcampus/Part1_Ch4/sqlite/sqlite_mcp_test_workspace
+
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Starting SQLite API MCP Server...', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+
+
+╭─ FastMCP 2.0 ──────────────────────────────────────────────────────────────╮
+│                                                                            │
+│        _ __ ___ ______           __  __  _____________    ____    ____     │
+│       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    │
+│      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    │
+│     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     │
+│    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      │
+│                                                                            │
+│                                                                            │
+│                                                                            │
+│    🖥️  Server name:     SQLiteAPIServer                                     │
+│    📦 Transport:       STDIO                                               │
+│                                                                            │
+│    📚 Docs:            https://gofastmcp.com                               │
+│    🚀 Deploy:          https://fastmcp.cloud                               │
+│                                                                            │
+│    🏎️  FastMCP version: 2.11.2                                              │
+│    🤝 MCP version:     1.16.0                                              │
+│                                                                            │
+╰────────────────────────────────────────────────────────────────────────────╯
+
+
+[10/09/25 07:17:04] INFO     Starting MCP server                  server.py:1445
+                             'SQLiteAPIServer' with transport                   
+                             'stdio'                                            
+================================================================================
+SQLite API MCP Server Test Started
+================================================================================
+
+Available Tools (15):
+  - init_database: 데이터베이스 초기화 (4-6)
+
+Args:
+    tenant_id: 테넌트 ID
+    db_path: 데...
+  - get_schema_info: 데이터베이스 스키마 정보 조회
+
+Args:
+    tenant_id: 테넌트 ID
+
+Returns:
+    ...
+  - create_document: 새 문서 생성 (4-7: Create)
+
+Args:
+    tenant_id: 테넌트 ID
+    filen...
+  - read_document: 문서 조회 (4-7: Read)
+
+Args:
+    tenant_id: 테넌트 ID
+    document_...
+  - update_document: 문서 수정 (4-7: Update)
+
+Args:
+    tenant_id: 테넌트 ID
+    documen...
+  - delete_document: 문서 삭제 (4-7: Delete)
+
+Args:
+    tenant_id: 테넌트 ID
+    documen...
+  - list_documents: 전체 문서 조회
+
+Args:
+    tenant_id: 테넌트 ID
+
+Returns:
+    dict: 문서...
+  - query_documents: 문서 쿼리 (4-8: 필터링, 페이징, 정렬)
+
+Args:
+    tenant_id: 테넌트 ID
+    f...
+  - search_documents: 문서 검색 (4-8)
+
+Args:
+    tenant_id: 테넌트 ID
+    keyword: 검색 키워드...
+  - get_statistics: 데이터베이스 통계 (4-8)
+
+Args:
+    tenant_id: 테넌트 ID
+
+Returns:
+    d...
+  - load_file_to_db: 파일을 데이터베이스에 적재 (4-9)
+
+Args:
+    tenant_id: 테넌트 ID
+    file_p...
+  - load_directory_to_db: 디렉토리의 파일들을 데이터베이스에 적재 (4-9)
+
+Args:
+    tenant_id: 테넌트 ID
+   ...
+  - export_to_json: JSON 파일로 리포트 생성 (4-10)
+
+Args:
+    tenant_id: 테넌트 ID
+    outp...
+  - export_to_csv: CSV 파일로 리포트 생성 (4-10)
+
+Args:
+    tenant_id: 테넌트 ID
+    outpu...
+  - export_to_markdown: Markdown 파일로 리포트 생성 (4-10)
+
+Args:
+    tenant_id: 테넌트 ID
+    ...
+
+[1] 데이터베이스 초기화 (4-6)
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected ident at line 1 column 3 [type=json_invalid, input_value='Initializing database for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+   Status: success
+   DB Path: /workspaces/fastcampus/Part1_Ch4/sqlite/sqlite_mcp_test_workspace/test.db
+   Tables: 1
+
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Getting schema info for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+   Schema Info:
+   - Tables: 1
+   - Indexes: 2
+
+[2] CRUD 작업 (4-7)
+   2-1. Create - 문서 생성
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: examp...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Created document ID: 1
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: doc_2...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: doc_3...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: doc_4...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: doc_5...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Created 4 more documents
+
+   2-2. Read - 문서 조회
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Reading document 1 for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Filename: example.txt
+      Content: Hello, SQLite MCP!
+
+   2-3. Update - 문서 수정
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Updating document 1 for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Status: success
+
+   2-4. List - 전체 문서 조회
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Listing all documents for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Total documents: 5
+      - ID 1: example.txt
+      - ID 2: doc_2.txt
+      - ID 3: doc_3.txt
+
+   2-5. Delete - 문서 삭제
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Deleting document 5 for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Status: success
+
+[3] 쿼리/페이징/정렬 (4-8)
+   3-1. Pagination - 페이지네이션
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Querying documents for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Page: 1/2
+      Items: 3/4
+
+   3-2. Filtering - 필터링 (file_type=text)
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Querying documents for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Found 3 text files
+
+   3-3. Sorting - 정렬 (filename DESC)
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Querying documents for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      First 3 items (sorted by filename DESC):
+      - example.txt
+      - doc_4.txt
+      - doc_3.txt
+
+   3-4. Search - 검색 (keyword='doc')
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value="Searching documents for ... in tenant: test_tenant", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Found 3 documents
+
+   3-5. Statistics - 통계
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Getting statistics for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Total count: 4
+      Total size: 87 bytes
+      Type distribution:
+         - text: 3
+         - json: 1
+
+[4] 파일→SQLite 파이프라인 (4-9)
+   4-1. Load File - 단일 파일 적재
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Loading file /workspaces...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Loaded: /workspaces/fastcampus/Part1_Ch4/sqlite/sqlite_mcp_test_workspace/test_file1.txt
+      Document ID: 6
+
+   4-2. Load Directory - 디렉토리 적재
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Loading directory /works...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Total files: 1
+      Loaded: 0
+      Skipped: 1
+      Failed: 0
+
+[5] SQLite→파일 리포트 (4-10)
+   5-1. Export to JSON
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Exporting to JSON: /work...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Output: /workspaces/fastcampus/Part1_Ch4/sqlite/sqlite_mcp_test_workspace/reports/report.json
+      Documents: 5
+      Size: 1757 bytes
+
+   5-2. Export to CSV
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Exporting to CSV: /works...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Output: /workspaces/fastcampus/Part1_Ch4/sqlite/sqlite_mcp_test_workspace/reports/report.csv
+      Documents: 5
+
+   5-3. Export to Markdown
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Exporting to Markdown: /...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+      Output: /workspaces/fastcampus/Part1_Ch4/sqlite/sqlite_mcp_test_workspace/reports/report.md
+      Documents: 5
+
+[6] 멀티테넌시 테스트
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected ident at line 1 column 3 [type=json_invalid, input_value='Initializing database for tenant: tenant2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: tenan...for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Creating document: tenan...txt for tenant: tenant2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Listing all documents for tenant: test_tenant', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/mcp/client/stdio/__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pydantic/main.py", line 746, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Listing all documents for tenant: tenant2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/json_invalid
+   Tenant 1 documents: 6
+   Tenant 2 documents: 1
+   ✓ Data isolation confirmed
+
+================================================================================
+Test Completed Successfully!
+================================================================================
+
+Cleaning up test workspace...
+Cleanup complete.
