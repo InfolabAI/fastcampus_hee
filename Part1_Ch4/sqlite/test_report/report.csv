@@ -1,0 +1,21 @@
+id,filename,content,file_type,file_size,created_at,updated_at
+1,document_1.txt,"This is the content of document 1.
+This is the content of document 1.
+This is the content of document 1.
+",text,50,2025-10-11 14:56:10,2025-10-11 14:56:10
+2,document_2.txt,"This is the content of document 2.
+This is the content of document 2.
+This is the content of document 2.
+",markdown,60,2025-10-11 14:56:10,2025-10-11 14:56:10
+3,document_3.txt,"This is the content of document 3.
+This is the content of document 3.
+This is the content of document 3.
+",text,70,2025-10-11 14:56:10,2025-10-11 14:56:10
+4,document_4.txt,"This is the content of document 4.
+This is the content of document 4.
+This is the content of document 4.
+",markdown,80,2025-10-11 14:56:10,2025-10-11 14:56:10
+5,document_5.txt,"This is the content of document 5.
+This is the content of document 5.
+This is the content of document 5.
+",text,90,2025-10-11 14:56:10,2025-10-11 14:56:10
