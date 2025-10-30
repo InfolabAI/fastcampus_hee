@@ -1,0 +1,8 @@
+*.pyc
+.env
+패스트*
+Part2_JWT/
+Part2_SSL/
+gemini-cli-mcp/
+gemini-cli/
+mds/
