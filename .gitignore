@@ -1,5 +1,6 @@
 *.pyc
 .env
+.claude
 패스트*
 Part2*/
 Part2*/
