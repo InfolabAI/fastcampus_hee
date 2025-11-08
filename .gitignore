@@ -1,8 +1,8 @@
 *.pyc
 .env
 패스트*
-Part2_JWT/
-Part2_SSL/
+Part2*/
+Part2*/
 gemini-cli-mcp/
 gemini-cli/
 mds/

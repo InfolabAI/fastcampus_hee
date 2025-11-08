@@ -43,7 +43,17 @@ RUN pip install --no-cache-dir \
     PyJWT==2.8.0 \
     python-json-logger==2.0.7 \
     aiohttp==3.9.1 \
-    pytest==8.4.2
+    pytest==8.4.2 \
+    flask \
+    pycasbin
+
+# 2.5. Infisical Python SDK 설치 (별도 설치로 의존성 충돌 방지)
+RUN pip install --no-cache-dir infisicalsdk
+
+# 2.6. Infisical CLI 설치
+RUN curl -1sLf 'https://artifacts-cli.infisical.com/setup.deb.sh' | sudo -E bash \
+    && sudo apt-get update \
+    && sudo apt-get install -y infisical
 
 # 3. nvm과 Node.js 설치
 # nvm 설치를 위한 환경 설정

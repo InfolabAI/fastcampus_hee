@@ -9,7 +9,8 @@
       "Bash(make shell python3 Part2_SQLInjection/NoSQLDefense/attack_simulation.py)",
       "Bash(make shell python3 Part2_SQLInjection/WithSQLDefense/test_secure_server.py)",
       "Bash(make:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

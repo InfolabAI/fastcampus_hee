@@ -9,7 +9,9 @@ services:
     container_name: fastcampus_dev
 
     # 호스트 사용자와 컨테이너 사용자 동기화
-    user: "${UID}:${GID}"
+    # Linux/Mac: .env 파일의 실제 UID/GID 사용
+    # Windows: 기본값 1000:1000 사용 (Docker Desktop이 파일 권한 자동 처리)
+    user: "${UID:-1000}:${GID:-1000}"
 
     # 프로젝트 폴더만 마운트 (홈 디렉터리 제외하여 호스트 설정 간섭 방지)
     volumes:
