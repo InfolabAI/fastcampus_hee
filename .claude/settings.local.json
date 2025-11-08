@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "Read(//home/hee/Dropbox/projects/trader/TradeMaster/**)",
+      "mcp__github-analysis__local_analyze_structure",
+      "Bash(mkdir:*)",
+      "Bash(make shell python3 Part2_SQLInjection/NoSQLDefense/test_vulnerable_server.py)",
+      "Bash(make shell python3 Part2_SQLInjection/NoSQLDefense/attack_simulation.py)",
+      "Bash(make shell python3 Part2_SQLInjection/WithSQLDefense/test_secure_server.py)",
+      "Bash(make:*)",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
