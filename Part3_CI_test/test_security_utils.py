@@ -1,148 +1,267 @@
 """
 보안 유틸리티 테스트
-- 서버 없이 실행 가능한 단위 테스트
+- 서버 없이 실행 가능한 단위 테스트.
 """
+# =============================================================================
+# 보안 유틸리티 단위 테스트 - CI 파이프라인용
+# =============================================================================
+# 목적: SQL Injection, XSS, 비밀번호 해싱, 난수 생성, 이메일 검증 테스트
+# 특징: 외부 서버 의존성 없이 실행 가능 (순수 단위 테스트)
+# 실행: pytest Part3_CI_test/test_security_utils.py
+# =============================================================================
 
-import hashlib
-import re
-import secrets
+import hashlib  # SHA256 해시 생성용 (비밀번호 해싱)
+import re  # 정규표현식 (패턴 탐지)
+import secrets  # 암호학적으로 안전한 난수 생성
 
 
+# =============================================================================
+# 테스트 클래스 1: 입력 검증 테스트
+# =============================================================================
 class TestInputValidation:
-    """입력 검증 테스트"""
+    """입력 검증 테스트 - SQL Injection 및 XSS 공격 패턴 탐지"""
 
     def test_sql_injection_pattern_detection(self):
-        """SQL Injection 패턴 탐지"""
+        """SQL Injection 패턴 탐지 - 위험한 SQL 구문 감지"""
+        # 위험한 SQL Injection 패턴들 (OWASP Top 10)
         dangerous_patterns = [
-            "' OR '1'='1",
-            "'; DROP TABLE users;--",
-            "'; DELETE FROM users;--",
-            "admin'--",
+            "' OR '1'='1",  # 항상 참인 조건 (인증 우회)
+            "'; DROP TABLE users;--",  # 테이블 삭제 공격
+            "'; DELETE FROM users;--",  # 데이터 삭제 공격
+            "admin'--",  # 주석으로 조건 무시
         ]
 
-        # 간단한 SQL Injection 패턴: 따옴표 + SQL 키워드 또는 주석
+        # SQL Injection 탐지 정규표현식
+        # 패턴: (따옴표 + SQL 키워드) 또는 (따옴표 + SQL 주석)
         sql_injection_regex = re.compile(
             r"('.*\b(OR|AND|DROP|DELETE|SELECT|INSERT|UPDATE)\b)|('.*--)",
-            re.IGNORECASE,
+            re.IGNORECASE,  # 대소문자 구분 없이 매칭
         )
 
+        # 모든 위험 패턴이 탐지되어야 함
         for pattern in dangerous_patterns:
             assert (
                 sql_injection_regex.search(pattern) is not None
-            ), f"Should detect: {pattern}"
+            ), f"Should detect: {pattern}"  # 탐지 실패 시 에러
 
     def test_safe_input_passes(self):
-        """안전한 입력은 통과"""
+        """안전한 입력은 통과 - 정상 입력 오탐 방지"""
+        # 안전한 일반 입력들 (SQL Injection 아님)
         safe_inputs = [
-            "john_doe",
-            "user@example.com",
-            "Hello World",
-            "12345",
+            "john_doe",  # 일반 사용자명
+            "user@example.com",  # 이메일 주소
+            "Hello World",  # 일반 텍스트
+            "12345",  # 숫자
         ]
 
+        # 동일한 SQL Injection 탐지 정규표현식
         sql_injection_regex = re.compile(
             r"('.*\b(OR|AND|DROP|DELETE|SELECT|INSERT|UPDATE)\b)|('.*--)",
             re.IGNORECASE,
         )
 
+        # 안전한 입력은 탐지되지 않아야 함 (False Positive 방지)
         for input_str in safe_inputs:
             assert (
                 sql_injection_regex.search(input_str) is None
-            ), f"Should pass: {input_str}"
+            ), f"Should pass: {input_str}"  # 오탐 시 에러
 
     def test_xss_pattern_detection(self):
-        """XSS 패턴 탐지"""
+        """XSS 패턴 탐지 - Cross-Site Scripting 공격 감지"""
+        # 위험한 XSS 패턴들 (OWASP Top 10)
         dangerous_patterns = [
-            "<script>alert('xss')</script>",
-            "<img src=x onerror=alert('xss')>",
-            "javascript:alert('xss')",
+            "<script>alert('xss')</script>",  # 스크립트 태그 삽입
+            "<img src=x onerror=alert('xss')>",  # 이벤트 핸들러 악용
+            "javascript:alert('xss')",  # javascript: URI 스킴
         ]
 
+        # XSS 탐지 정규표현식 - 주요 공격 벡터 탐지
         xss_regex = re.compile(r"<script|javascript:|onerror=|onclick=", re.IGNORECASE)
 
+        # 모든 XSS 패턴이 탐지되어야 함
         for pattern in dangerous_patterns:
             assert xss_regex.search(pattern) is not None, f"Should detect: {pattern}"
 
 
+# =============================================================================
+# 테스트 클래스 2: 비밀번호 해싱 테스트
+# =============================================================================
 class TestPasswordHashing:
-    """비밀번호 해싱 테스트"""
+    """비밀번호 해싱 테스트 - SHA256 해시 함수 특성 검증"""
 
     def test_hash_is_deterministic(self):
-        """같은 입력에 대해 같은 해시 생성"""
-        password = "test_password_123"
-        salt = "fixed_salt_for_testing"
+        """같은 입력에 대해 같은 해시 생성 - 결정적(Deterministic) 특성"""
+        password = "test_password_123"  # 테스트용 비밀번호
+        salt = "fixed_salt_for_testing"  # 고정 솔트 (레인보우 테이블 공격 방지)
 
-        hash1 = hashlib.sha256((password + salt).encode()).hexdigest()
-        hash2 = hashlib.sha256((password + salt).encode()).hexdigest()
+        # 동일한 입력 → 동일한 해시 (결정적 함수)
+        hash1 = hashlib.sha256((password + salt).encode()).hexdigest()  # 첫 번째 해시
+        hash2 = hashlib.sha256((password + salt).encode()).hexdigest()  # 두 번째 해시
 
-        assert hash1 == hash2
+        assert hash1 == hash2  # 결정적: 항상 같은 결과
 
     def test_different_passwords_different_hashes(self):
-        """다른 비밀번호는 다른 해시 생성"""
-        salt = "fixed_salt"
+        """다른 비밀번호는 다른 해시 생성 - 충돌 저항성(Collision Resistance)"""
+        salt = "fixed_salt"  # 동일한 솔트 사용
 
-        hash1 = hashlib.sha256(("password1" + salt).encode()).hexdigest()
-        hash2 = hashlib.sha256(("password2" + salt).encode()).hexdigest()
+        # 다른 입력 → 다른 해시 (충돌 저항성)
+        hash1 = hashlib.sha256(("password1" + salt).encode()).hexdigest()  # password1의 해시
+        hash2 = hashlib.sha256(("password2" + salt).encode()).hexdigest()  # password2의 해시
 
-        assert hash1 != hash2
+        assert hash1 != hash2  # 다른 입력은 다른 해시 생성
 
     def test_hash_length(self):
-        """SHA256 해시 길이 확인 (64자)"""
-        password_hash = hashlib.sha256("test".encode()).hexdigest()
+        """SHA256 해시 길이 확인 (64자) - 고정 길이 출력"""
+        password_hash = hashlib.sha256("test".encode()).hexdigest()  # hex 문자열로 변환
 
-        assert len(password_hash) == 64
+        assert len(password_hash) == 64  # SHA256 = 256비트 = 32바이트 = 64자 hex
 
 
+# =============================================================================
+# 테스트 클래스 3: 보안 난수 생성 테스트
+# =============================================================================
 class TestSecureRandomGeneration:
-    """보안 난수 생성 테스트"""
+    """보안 난수 생성 테스트 - secrets 모듈 (암호학적 안전성)"""
 
     def test_token_uniqueness(self):
-        """토큰 고유성 테스트"""
+        """토큰 고유성 테스트 - 충돌 방지"""
+        # 100개의 토큰 생성 (각 32바이트 = 256비트 엔트로피)
         tokens = [secrets.token_hex(32) for _ in range(100)]
-        unique_tokens = set(tokens)
+        unique_tokens = set(tokens)  # 중복 제거한 집합
 
+        # 모든 토큰이 고유해야 함 (충돌 확률 = 거의 0)
         assert len(tokens) == len(unique_tokens), "All tokens should be unique"
 
     def test_token_length(self):
-        """토큰 길이 테스트"""
-        token = secrets.token_hex(32)
+        """토큰 길이 테스트 - 충분한 엔트로피 보장"""
+        token = secrets.token_hex(32)  # 32바이트 = 256비트 난수
 
-        assert len(token) == 64  # 32 bytes = 64 hex characters
+        assert len(token) == 64  # 32바이트 → 64자 hex 문자열
 
     def test_token_is_hexadecimal(self):
-        """토큰이 16진수 문자열인지 확인"""
-        token = secrets.token_hex(16)
+        """토큰이 16진수 문자열인지 확인 - 유효한 형식 검증"""
+        token = secrets.token_hex(16)  # 16바이트 토큰 생성
 
+        # 모든 문자가 16진수(0-9, a-f)여야 함
         assert all(c in "0123456789abcdef" for c in token)
 
 
+# =============================================================================
+# 테스트 클래스 4: 이메일 검증 테스트
+# =============================================================================
 class TestEmailValidation:
-    """이메일 검증 테스트"""
+    """이메일 검증 테스트 - RFC 5321 기반 형식 검증"""
 
     def test_valid_emails(self):
-        """유효한 이메일 형식"""
+        """유효한 이메일 형식 - 정상 이메일 패턴 통과"""
+        # 다양한 유효 이메일 형식들
         valid_emails = [
-            "user@example.com",
-            "user.name@example.com",
-            "user+tag@example.co.kr",
-            "user123@sub.example.org",
+            "user@example.com",  # 기본 형식
+            "user.name@example.com",  # 점(.) 포함 로컬 파트
+            "user+tag@example.co.kr",  # 플러스(+) 태그 및 국가 도메인
+            "user123@sub.example.org",  # 숫자 및 서브도메인
         ]
 
+        # 이메일 검증 정규표현식 (RFC 5321 간소화 버전)
+        # 로컬파트@도메인.TLD 형식
         email_regex = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 
+        # 모든 유효 이메일이 통과해야 함
         for email in valid_emails:
             assert email_regex.match(email) is not None, f"Should be valid: {email}"
 
     def test_invalid_emails(self):
-        """유효하지 않은 이메일 형식"""
+        """유효하지 않은 이메일 형식 - 잘못된 패턴 거부"""
+        # 다양한 무효 이메일 형식들
         invalid_emails = [
-            "userexample.com",  # @ 없음
+            "userexample.com",  # @ 없음 (필수 구분자 누락)
             "user@",  # 도메인 없음
-            "@example.com",  # 사용자명 없음
-            "user@.com",  # 도메인 이름 없음
+            "@example.com",  # 사용자명 없음 (로컬 파트 누락)
+            "user@.com",  # 도메인 이름 없음 (빈 도메인)
         ]
 
+        # 동일한 이메일 검증 정규표현식
         email_regex = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 
+        # 모든 무효 이메일이 거부되어야 함
         for email in invalid_emails:
             assert email_regex.match(email) is None, f"Should be invalid: {email}"
+
+
+# =============================================================================
+# 🚨 의도적 에러 섹션 (Deliberate Errors for CI Demonstration)
+# =============================================================================
+# 아래 코드의 주석을 해제하면 CI 파이프라인에서 다양한 에러가 발생합니다.
+# 학습 목적으로 주석을 해제하고 CI 실패를 확인해보세요.
+#
+# 주석 해제 방법: 각 섹션의 코드 앞 '#'을 제거
+# 복원 방법: 다시 '#'을 추가하거나 git checkout으로 복원
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 에러 1: 사용하지 않는 import (flake8 F401)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: F401 'os' imported but unused
+# -----------------------------------------------------------------------------
+# import os  # noqa: F401 - 사용하지 않는 import
+
+# -----------------------------------------------------------------------------
+# 에러 2: 빈 줄 부족 (flake8 E302)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: E302 expected 2 blank lines, found 1
+# 아래 함수 위에 빈 줄이 1개만 있어서 에러 발생
+# -----------------------------------------------------------------------------
+# def deliberate_e302_error():
+#     """빈 줄 부족 에러 데모"""
+#     pass
+
+# -----------------------------------------------------------------------------
+# 에러 3: 줄 길이 초과 (flake8 E501)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: E501 line too long (150 > 120 characters)
+# -----------------------------------------------------------------------------
+# long_var = "This line is intentionally very long to trigger E501 error when uncommented, exceeding 120 chars limit"
+
+# -----------------------------------------------------------------------------
+# 에러 4: f-string 플레이스홀더 누락 (flake8 F541)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: F541 f-string is missing placeholders
+# -----------------------------------------------------------------------------
+# def deliberate_f541_error():
+#     result = f"This f-string has no placeholders"  # noqa: F541
+#     return result
+
+# -----------------------------------------------------------------------------
+# 에러 5: 하드코딩된 비밀번호 (bandit B105)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: B105 hardcoded_password_string
+# -----------------------------------------------------------------------------
+# HARDCODED_PASSWORD = "super_secret_password_123"  # nosec B105
+
+# -----------------------------------------------------------------------------
+# 에러 6: eval 사용 (bandit B307)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: B307 Use of possibly insecure function
+# -----------------------------------------------------------------------------
+# def deliberate_b307_error(user_input):
+#     """eval 사용 보안 에러 데모"""
+#     return eval(user_input)  # nosec B307
+
+# -----------------------------------------------------------------------------
+# 에러 7: exec 사용 (bandit B102)
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: B102 Use of exec detected
+# -----------------------------------------------------------------------------
+# def deliberate_b102_error(code):
+#     """exec 사용 보안 에러 데모"""
+#     exec(code)  # nosec B102
+
+# -----------------------------------------------------------------------------
+# 에러 8: assert 문 사용 (bandit B101) - 테스트 외부에서
+# -----------------------------------------------------------------------------
+# 주석 해제 시 에러: B101 Use of assert detected
+# -----------------------------------------------------------------------------
+# def deliberate_b101_error(value):
+#     """assert 사용 보안 에러 데모 (프로덕션 코드에서)"""
+#     assert value > 0, "Value must be positive"  # nosec B101
+#     return value
