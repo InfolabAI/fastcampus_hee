@@ -105,8 +105,12 @@ class TestPasswordHashing:
         salt = "fixed_salt"  # 동일한 솔트 사용
 
         # 다른 입력 → 다른 해시 (충돌 저항성)
-        hash1 = hashlib.sha256(("password1" + salt).encode()).hexdigest()  # password1의 해시
-        hash2 = hashlib.sha256(("password2" + salt).encode()).hexdigest()  # password2의 해시
+        hash1 = hashlib.sha256(
+            ("password1" + salt).encode()
+        ).hexdigest()  # password1의 해시
+        hash2 = hashlib.sha256(
+            ("password2" + salt).encode()
+        ).hexdigest()  # password2의 해시
 
         assert hash1 != hash2  # 다른 입력은 다른 해시 생성
 

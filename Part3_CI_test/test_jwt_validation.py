@@ -31,7 +31,8 @@ class TestJWTCreation:
         """유효한 JWT 토큰 생성 테스트"""
         payload = {
             "sub": "user123",  # subject: 토큰 주체 (사용자 ID)
-            "exp": datetime.now(timezone.utc) + timedelta(hours=1),  # expiration: 1시간 후 만료
+            "exp": datetime.now(timezone.utc)
+            + timedelta(hours=1),  # expiration: 1시간 후 만료
         }
         token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")  # HS256 알고리즘으로 서명
 
@@ -95,7 +96,9 @@ class TestJWTValidation:
     def test_malformed_token_raises_error(self):
         """잘못된 형식의 토큰이 DecodeError를 발생시키는지 확인"""
         with pytest.raises(jwt.DecodeError):  # 디코딩 에러 예상
-            jwt.decode("invalid.token.format", TEST_SECRET, algorithms=["HS256"])  # 유효하지 않은 토큰
+            jwt.decode(
+                "invalid.token.format", TEST_SECRET, algorithms=["HS256"]
+            )  # 유효하지 않은 토큰
 
 
 # =============================================================================

@@ -55,7 +55,13 @@ class TestEnvironmentConfig:
 
     def test_log_level_validation(self):
         """로그 레벨 검증 - 유효/무효 레벨 테스트"""
-        valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]  # Python 표준 로그 레벨
+        valid_levels = [
+            "DEBUG",
+            "INFO",
+            "WARNING",
+            "ERROR",
+            "CRITICAL",
+        ]  # Python 표준 로그 레벨
         invalid_levels = ["TRACE", "VERBOSE", "info", ""]  # 무효한 레벨 (대소문자 구분)
 
         for level in valid_levels:
@@ -142,8 +148,14 @@ class TestCasbinPolicyFormat:
 
         for policy in valid_policies:
             parts = policy.split(", ")  # 쉼표로 분리
-            assert len(parts) >= 2, f"Policy should have at least 2 parts: {policy}"  # 최소 2개 파트
-            assert parts[0] in ["p", "g", "g2"], f"Invalid policy type: {parts[0]}"  # p: 정책, g: 역할
+            assert (
+                len(parts) >= 2
+            ), f"Policy should have at least 2 parts: {policy}"  # 최소 2개 파트
+            assert parts[0] in [
+                "p",
+                "g",
+                "g2",
+            ], f"Invalid policy type: {parts[0]}"  # p: 정책, g: 역할
 
     def test_role_hierarchy(self):
         """역할 계층 구조 테스트 - RBAC 권한 상속"""
