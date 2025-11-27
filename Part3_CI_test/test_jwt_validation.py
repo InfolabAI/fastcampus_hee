@@ -3,10 +3,10 @@ JWT 토큰 검증 테스트
 - 서버 없이 실행 가능한 단위 테스트
 """
 
-import pytest
-import jwt
 from datetime import datetime, timedelta, timezone
 
+import jwt
+import pytest
 
 # 테스트용 시크릿 키
 TEST_SECRET = "test-secret-key-for-ci"
@@ -88,7 +88,10 @@ class TestJWTAlgorithm:
 
     def test_hs256_algorithm(self):
         """HS256 알고리즘 테스트"""
-        payload = {"sub": "user123", "exp": datetime.now(timezone.utc) + timedelta(hours=1)}
+        payload = {
+            "sub": "user123",
+            "exp": datetime.now(timezone.utc) + timedelta(hours=1),
+        }
         token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")
         decoded = jwt.decode(token, TEST_SECRET, algorithms=["HS256"])
 
@@ -96,7 +99,10 @@ class TestJWTAlgorithm:
 
     def test_wrong_algorithm_raises_error(self):
         """잘못된 알고리즘 지정 시 에러 발생"""
-        payload = {"sub": "user123", "exp": datetime.now(timezone.utc) + timedelta(hours=1)}
+        payload = {
+            "sub": "user123",
+            "exp": datetime.now(timezone.utc) + timedelta(hours=1),
+        }
         token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")
 
         with pytest.raises(jwt.InvalidAlgorithmError):

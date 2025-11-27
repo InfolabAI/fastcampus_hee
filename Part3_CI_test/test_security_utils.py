@@ -3,9 +3,8 @@
 - 서버 없이 실행 가능한 단위 테스트
 """
 
-import pytest
-import re
 import hashlib
+import re
 import secrets
 
 
@@ -28,7 +27,9 @@ class TestInputValidation:
         )
 
         for pattern in dangerous_patterns:
-            assert sql_injection_regex.search(pattern) is not None, f"Should detect: {pattern}"
+            assert (
+                sql_injection_regex.search(pattern) is not None
+            ), f"Should detect: {pattern}"
 
     def test_safe_input_passes(self):
         """안전한 입력은 통과"""
@@ -45,7 +46,9 @@ class TestInputValidation:
         )
 
         for input_str in safe_inputs:
-            assert sql_injection_regex.search(input_str) is None, f"Should pass: {input_str}"
+            assert (
+                sql_injection_regex.search(input_str) is None
+            ), f"Should pass: {input_str}"
 
     def test_xss_pattern_detection(self):
         """XSS 패턴 탐지"""

@@ -3,8 +3,6 @@
 - 서버 없이 실행 가능한 단위 테스트
 """
 
-import pytest
-import os
 import json
 
 
@@ -21,7 +19,9 @@ class TestEnvironmentConfig:
         }
 
         # JWT_SECRET 최소 길이 검증
-        assert len(test_config["JWT_SECRET"]) >= 32, "JWT_SECRET should be at least 32 characters"
+        assert (
+            len(test_config["JWT_SECRET"]) >= 32
+        ), "JWT_SECRET should be at least 32 characters"
 
         # PORT 숫자 검증
         assert test_config["MCP_SERVER_PORT"].isdigit(), "PORT should be numeric"
