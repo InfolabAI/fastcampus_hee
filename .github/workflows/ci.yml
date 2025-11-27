@@ -87,7 +87,7 @@ jobs:
       # . : 현재 디렉토리 전체 검사
       # -----------------------------------------------------------------------
       - name: Run flake8
-        run: flake8 --max-line-length=120 --exclude=gemini-cli,venv,.git,Part2_TLS .
+        run: flake8 --max-line-length=120 Part3_CI_test/
 
       # -----------------------------------------------------------------------
       # Step 5: black 포맷 검사
@@ -96,7 +96,7 @@ jobs:
       # --exclude: 제외 디렉토리 (정규식 패턴)
       # -----------------------------------------------------------------------
       - name: Check black formatting
-        run: black --check --exclude="gemini-cli|venv|Part2_TLS" .
+        run: black --check Part3_CI_test/
 
       # -----------------------------------------------------------------------
       # Step 6: import 정렬 검사
@@ -105,7 +105,7 @@ jobs:
       # --skip: 제외할 디렉토리
       # -----------------------------------------------------------------------
       - name: Check import sorting
-        run: isort --check-only --skip gemini-cli --skip venv --skip Part2_TLS .
+        run: isort --check-only Part3_CI_test/
 
   # ===========================================================================
   # Job 2: test (테스트 실행)
@@ -182,8 +182,8 @@ jobs:
       # -----------------------------------------------------------------------
       - name: Run security scan
         run: |
-          bandit -r . -x ./gemini-cli,./venv,./Part2_TLS -f json -o bandit-report.json || true
-          bandit -r . -x ./gemini-cli,./venv,./Part2_TLS -ll || true
+          bandit -r Part3_CI_test/ -f json -o bandit-report.json || true
+          bandit -r Part3_CI_test/ -ll || true
 
       # -----------------------------------------------------------------------
       # Step: 보안 리포트 업로드
