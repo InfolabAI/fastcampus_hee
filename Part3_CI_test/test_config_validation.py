@@ -2,6 +2,7 @@
 설정 검증 테스트
 - 서버 없이 실행 가능한 단위 테스트.
 """
+
 # =============================================================================
 # 설정 검증 단위 테스트 - CI 파이프라인용
 # =============================================================================
@@ -51,7 +52,9 @@ class TestEnvironmentConfig:
             assert 1 <= port <= 65535, f"Port {port} should be valid"  # 유효 범위 확인
 
         for port in invalid_ports:
-            assert not (1 <= port <= 65535), f"Port {port} should be invalid"  # 범위 밖 확인
+            assert not (
+                1 <= port <= 65535
+            ), f"Port {port} should be invalid"  # 범위 밖 확인
 
     def test_log_level_validation(self):
         """로그 레벨 검증 - 유효/무효 레벨 테스트"""

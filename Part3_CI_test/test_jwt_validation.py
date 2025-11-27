@@ -2,6 +2,7 @@
 JWT 토큰 검증 테스트
 - 서버 없이 실행 가능한 단위 테스트
 """
+
 # =============================================================================
 # JWT 토큰 검증 단위 테스트 - CI 파이프라인용
 # =============================================================================
@@ -34,7 +35,9 @@ class TestJWTCreation:
             "exp": datetime.now(timezone.utc)
             + timedelta(hours=1),  # expiration: 1시간 후 만료
         }
-        token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")  # HS256 알고리즘으로 서명
+        token = jwt.encode(
+            payload, TEST_SECRET, algorithm="HS256"
+        )  # HS256 알고리즘으로 서명
 
         assert token is not None  # 토큰이 생성되었는지 확인
         assert isinstance(token, str)  # 문자열 타입인지 확인
@@ -75,7 +78,8 @@ class TestJWTValidation:
         """만료된 토큰이 ExpiredSignatureError를 발생시키는지 확인"""
         payload = {
             "sub": "user123",
-            "exp": datetime.now(timezone.utc) - timedelta(hours=1),  # 과거 시간 = 만료됨
+            "exp": datetime.now(timezone.utc)
+            - timedelta(hours=1),  # 과거 시간 = 만료됨
         }
         token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")
 
@@ -88,10 +92,14 @@ class TestJWTValidation:
             "sub": "user123",
             "exp": datetime.now(timezone.utc) + timedelta(hours=1),
         }
-        token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")  # 올바른 시크릿으로 서명
+        token = jwt.encode(
+            payload, TEST_SECRET, algorithm="HS256"
+        )  # 올바른 시크릿으로 서명
 
         with pytest.raises(jwt.InvalidSignatureError):  # 서명 불일치 에러 예상
-            jwt.decode(token, "wrong-secret-key", algorithms=["HS256"])  # 잘못된 시크릿으로 검증
+            jwt.decode(
+                token, "wrong-secret-key", algorithms=["HS256"]
+            )  # 잘못된 시크릿으로 검증
 
     def test_malformed_token_raises_error(self):
         """잘못된 형식의 토큰이 DecodeError를 발생시키는지 확인"""
@@ -114,7 +122,9 @@ class TestJWTAlgorithm:
             "exp": datetime.now(timezone.utc) + timedelta(hours=1),
         }
         token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")  # HMAC-SHA256
-        decoded = jwt.decode(token, TEST_SECRET, algorithms=["HS256"])  # 같은 알고리즘으로 검증
+        decoded = jwt.decode(
+            token, TEST_SECRET, algorithms=["HS256"]
+        )  # 같은 알고리즘으로 검증
 
         assert decoded["sub"] == "user123"  # 정상 디코딩 확인
 
@@ -127,4 +137,6 @@ class TestJWTAlgorithm:
         token = jwt.encode(payload, TEST_SECRET, algorithm="HS256")  # HS256으로 서명
 
         with pytest.raises(jwt.InvalidAlgorithmError):  # 알고리즘 불일치 에러 예상
-            jwt.decode(token, TEST_SECRET, algorithms=["HS512"])  # HS512로 검증 시도 (불일치)
+            jwt.decode(
+                token, TEST_SECRET, algorithms=["HS512"]
+            )  # HS512로 검증 시도 (불일치)
