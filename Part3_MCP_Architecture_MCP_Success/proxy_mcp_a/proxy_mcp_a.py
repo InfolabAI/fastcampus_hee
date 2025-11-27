@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+"""Proxy MCP A - FastMCP server with JWT from Infisical and certificate pinning
+Run with: infisical run -- python proxy_mcp_a.py
+"""
+import os, json, sys, time, ssl, urllib.request, urllib.error
+from pathlib import Path
+from datetime import datetime, timedelta
+from typing import Optional, Dict, Any, List
+from authlib.jose import jwt
+from fastmcp import FastMCP
+
+PROXY_URL = os.getenv("PROXY_URL", "https://localhost:8443")
+TENANT = "tenant_a"
+TARGET = "a"
+
+# JWT_SECRET must come from Infisical
+JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET:
+    print("ERROR: JWT_SECRET not set. Run with: infisical run -- python proxy_mcp_a.py", file=sys.stderr)
+    sys.exit(1)
+
+# CA certificate for pinning
+CA_PATH = Path(__file__).parent.parent / "proxy_server" / "certs" / "ca.pem"
+
+# Short-lived token cache (no long-lived storage)
+_token_cache = {"token": None, "expires": None}
+
+# FastMCP server instance
+mcp = FastMCP("ProxyMCP_A", instructions=f"Proxy MCP for {TENANT} - routes to backend_{TARGET}")
+
+def create_jwt() -> str:
+    """Create a short-lived JWT token (5 min)"""
+    header = {"alg": "HS256"}
+    payload = {"tenant": TENANT, "exp": datetime.utcnow() + timedelta(minutes=5), "iat": datetime.utcnow()}
+    return jwt.encode(header, payload, JWT_SECRET).decode()
+
+def get_token() -> str:
+    """Get valid token, auto-refresh if expired"""
+    if _token_cache["token"] and _token_cache["expires"] and datetime.utcnow() < _token_cache["expires"]:
+        return _token_cache["token"]
+    _token_cache["token"] = create_jwt()
+    _token_cache["expires"] = datetime.utcnow() + timedelta(minutes=4)
+    return _token_cache["token"]
+
+def create_ssl_context() -> ssl.SSLContext:
+    """Create SSL context with certificate pinning"""
+    ctx = ssl.create_default_context()
+    if CA_PATH.exists():
+        ctx.load_verify_locations(str(CA_PATH))
+        print(f"Certificate pinning enabled: {CA_PATH}", file=sys.stderr)
+    else:
+        print(f"WARNING: CA not found at {CA_PATH}, using system CA", file=sys.stderr)
+    return ctx
+
+def call_proxy(method: str, params: Dict[str, Any], retries: int = 3, backoff: float = 1.0) -> Dict[str, Any]:
+    """Call proxy server with retry and exponential backoff"""
+    url = f"{PROXY_URL}/mcp/{TARGET}"
+    data = json.dumps({"method": method, "params": params}).encode()
+
+    for attempt in range(retries):
+        try:
+            headers = {"Content-Type": "application/json", "Authorization": f"Bearer {get_token()}"}
+            req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+            with urllib.request.urlopen(req, context=create_ssl_context(), timeout=30) as resp:
+                return json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            if e.code == 401:
+                _token_cache["token"] = None
+                continue
+            if attempt == retries - 1:
+                return {"error": f"HTTP {e.code}: {e.reason}"}
+        except Exception as e:
+            if attempt == retries - 1:
+                return {"error": str(e)}
+        time.sleep(backoff * (2 ** attempt))
+    return {"error": "Max retries exceeded"}
+
+@mcp.tool()
+async def insert(name: str, value: str) -> Dict[str, Any]:
+    """
+    Insert a new item into Backend A.
+
+    :param name: Name of the item to insert
+    :param value: Value of the item
+    :return: Result with status and inserted item details
+    """
+    print(f"[{TENANT}] insert: name={name}, value={value}", file=sys.stderr)
+    result = call_proxy("insert", {"name": name, "value": value})
+    return result
+
+@mcp.tool()
+async def update(id: int, value: str) -> Dict[str, Any]:
+    """
+    Update an existing item in Backend A.
+
+    :param id: ID of the item to update
+    :param value: New value for the item
+    :return: Result with status and updated item details
+    """
+    print(f"[{TENANT}] update: id={id}, value={value}", file=sys.stderr)
+    result = call_proxy("update", {"id": id, "value": value})
+    return result
+
+@mcp.tool()
+async def select(id: Optional[int] = None) -> Dict[str, Any]:
+    """
+    Select items from Backend A.
+
+    :param id: Optional ID to select specific item. If not provided, returns all items.
+    :return: Result with queried items
+    """
+    params = {"id": id} if id is not None else {}
+    print(f"[{TENANT}] select: params={params}", file=sys.stderr)
+    result = call_proxy("select", params)
+    return result
+
+if __name__ == "__main__":
+    print(f"Proxy MCP A started (tenant: {TENANT})", file=sys.stderr)
+    print(f"JWT_SECRET loaded from Infisical", file=sys.stderr)
+    print(f"Target: {PROXY_URL}/mcp/{TARGET}", file=sys.stderr)
+    mcp.run()
