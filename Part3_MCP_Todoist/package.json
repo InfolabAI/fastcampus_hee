@@ -1,0 +1,42 @@
+{
+    "name": "todoist-mcp",
+    "version": "1.0.2",
+    "main": "index.js",
+    "type": "module",
+    "bin": {
+        "todoist-mcp": "./bin/index.js"
+    },
+    "scripts": {
+        "build": "npm run build-tsc && npm run permissions",
+        "build-tsc": "npx tsc",
+        "permissions": "node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+        "format": "biome check --write",
+        "prepare": "husky || true && npm run build"
+    },
+    "keywords": [
+        "ai",
+        "todoist",
+        "productivity",
+        "model-context-protocol",
+        "claude",
+        "task-management",
+        "project-management"
+    ],
+    "author": "David Miotti",
+    "license": "MIT",
+    "description": "Connect this [Model Context Protocol](https://modelcontextprotocol.io/introduction) server to your LLM to interact with Todoist.",
+    "dependencies": {
+        "@doist/todoist-api-typescript": "5.1.0",
+        "@modelcontextprotocol/sdk": "1.15.1"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.1.1",
+        "@types/node": "22.16.4",
+        "husky": "9.1.7",
+        "lint-staged": "16.1.2",
+        "typescript": "5.8.3"
+    },
+    "lint-staged": {
+        "*.{js,ts,json}": ["biome check --write"]
+    }
+}
