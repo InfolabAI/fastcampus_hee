@@ -182,8 +182,8 @@ jobs:
       # -----------------------------------------------------------------------
       - name: Run security scan
         run: |
-          bandit -r Part3_CI_test/ -f json -o bandit-report.json || true
-          bandit -r Part3_CI_test/ -ll || true
+          bandit -r Part3_CI_test/ --skip B101 -f json -o bandit-report.json || true
+          bandit -r Part3_CI_test/ --skip B101 -ll
 
       # -----------------------------------------------------------------------
       # Step: 보안 리포트 업로드
